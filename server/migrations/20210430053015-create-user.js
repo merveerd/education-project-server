@@ -10,7 +10,6 @@ module.exports = {
       },
       name: {
         type: Sequelize.STRING,
-        allowNull: false,
       },
       username: {
         type: Sequelize.STRING,
@@ -33,37 +32,30 @@ module.exports = {
       },
       language: {
         type: Sequelize.STRING,
-        allowNull: false,
       },
       country: {
         type: Sequelize.STRING,
-        allowNull: false,
       },
       city: {
         type: Sequelize.STRING,
-        allowNull: false,
       },
 
       education_level: {
         type: Sequelize.STRING,
-        allowNull: false,
       },
 
       school: {
         type: Sequelize.STRING,
-        allowNull: false,
       },
 
       language_level: {
         type: Sequelize.STRING,
-        allowNull: false,
       },
       groupId: {
         type: Sequelize.STRING,
       },
       age: {
         type: Sequelize.INTEGER,
-        allowNull: false,
       },
       score: {
         type: Sequelize.INTEGER,

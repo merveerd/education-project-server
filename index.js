@@ -9,13 +9,14 @@ app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ extended: false, limit: "20mb" }));
 app.use(cors());
 app.use(logger("dev"));
+
 const { signup, signin, protect } = require("./server/utils/auth-middleware");
 const port = 4000;
 
 //Auth Routes
 app.post("/signup", signup);
 app.post("/signin", signin);
-//app.get("/", protect);
+app.get("/", protect);
 
 const user_courseRoute = require("./server/routes/user_course.router");
 app.use("/usercourse", user_courseRoute);

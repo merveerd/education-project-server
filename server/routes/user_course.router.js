@@ -8,10 +8,9 @@ router
   .get(user_courseController.listAll)
   .delete(user_courseController.delete);
 
-router.route("/:user").get(user_courseController.listByUser);
+// router.route("/:userId").get(user_courseController.listByUser);
 
-router
-  .route("/:type/:user")
-  .get(user_courseController.listByTopicTypeUserwithCache);
+//subroutes can be done for differentiating userId, topic etc like /type/:type
+router.route("/:type").get(user_courseController.listByTopic);
 
 module.exports = router;

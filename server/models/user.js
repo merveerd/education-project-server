@@ -4,7 +4,6 @@ module.exports = (sequelize, DataTypes) => {
   const user = sequelize.define("user", {
     name: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
     username: {
       type: DataTypes.STRING,
@@ -27,15 +26,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     language: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
     country: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
     city: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
 
     school: {
@@ -43,15 +39,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     education_level: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
     language_level: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
     age: {
       type: DataTypes.INTEGER,
-      allowNull: false,
     },
     score: {
       type: DataTypes.INTEGER,

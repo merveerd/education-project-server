@@ -1,8 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const userController = require("../controllers").user;
-
-router.route("/").post(userController.create).get(userController.list);
+const { authorize } = require("../utils/auth-middleware");
+router
+  .route("/")
+  .post(userController.create)
+  .get(userController.list);
 
 router
   .route("/:id")

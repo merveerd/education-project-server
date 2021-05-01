@@ -60,55 +60,49 @@ module.exports = {
       });
   },
 
-  listByTopicTypeUserwithCache(req, res) {
-    client.get(
-      `all-courses-${req.params.user}-${req.params.type}`,
-      function (err, object) {
-        if (object) {
-          return res.status(200).json({ data: JSON.parse(object) });
-        } else {
-          return user_course
-            .findAll({
-              raw: true,
-              attributes: [["course_id", "course id"]],
-              include: [
-                {
-                  model: users,
-                  where: {
-                    name: req.params.user.toLowerCase(),
-                  },
-                  as: "users",
-                  attributes: [["name", "name"]],
+  listByTopic(req, res) {
+    client.get(`all-user-courses-${req.params.type}`, function (err, object) {
+      if (object) {
+        return res.status(200).json({ data: JSON.parse(object) });
+      } else {
+        return user_course
+          .findAll({
+            raw: true,
+            attributes: [["course_id", "course id"]],
+            include: [
+              {
+                model: users,
+                as: "users",
+                attributes: [["name", "name"]],
+              },
+              {
+                model: courses,
+                where: {
+                  type: req.params.type,
                 },
-                {
-                  model: courses,
-                  where: {
-                    type: req.params.type,
-                  },
-                  as: "courses",
-                  attributes: [
-                    ["name", "name"],
-                    ["topic", "topic"],
-                    ["type", "type"],
-                  ],
-                },
-              ],
-            })
-            .then(function (result) {
-              cacheSetter(
-                `all-courses-${req.params.user}-${req.params.type}-${req.body.minCap}-${req.body.maxCap}`,
-                result
-              );
+                as: "courses",
+                attributes: [
+                  ["name", "name"],
+                  ["topic", "topic"],
+                  ["type", "type"],
+                ],
+              },
+            ],
+          })
+          .then(function (result) {
+            cacheSetter(
+              `all-courses-${req.params.user}-${req.params.type}-${req.body.minCap}-${req.body.maxCap}`,
+              result
+            );
 
-              res.status(200).json({ data: result });
-            })
-            .catch((error) => {
-              console.log(error.toString());
-              res.status(400).send(error);
-            });
-        }
+            res.status(200).json({ data: result });
+          })
+          .catch((error) => {
+            console.log(error.toString());
+            res.status(400).send(error.toString());
+          });
       }
-    );
+    });
   },
 
   listAll(req, res) {
@@ -147,7 +141,7 @@ module.exports = {
   },
 
   listByUser(req, res) {
-    client.get(`${req.params.user}-all-courses`, function (err, object) {
+    client.get(`${req.params.userId}-all-courses`, function (err, object) {
       if (object) {
         return res.status(200).json({ data: JSON.parse(object) });
       } else {
@@ -159,7 +153,7 @@ module.exports = {
               {
                 model: users,
                 where: {
-                  name: req.params.user.toLowerCase(),
+                  id: req.params.userId.toLowerCase(),
                 },
                 as: "users",
                 attributes: [["name", "name"]],
