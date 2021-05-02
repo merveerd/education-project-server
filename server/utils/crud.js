@@ -75,15 +75,6 @@ const getCount = (model) => async (req, res) => {
 };
 
 const update = (model) => async (req, res) => {
-  let keys = Object.keys(req.body),
-    updateObject = {};
-  keys.forEach((item) => {
-    updateObject[item] =
-      typeof req.body[item] === "string"
-        ? req.body[item].toLowerCase()
-        : req.body[item];
-  });
-
   return model
     .findByPk(req.params.id)
     .then((updatingItem) => {
@@ -92,13 +83,10 @@ const update = (model) => async (req, res) => {
           message: "updatingItem is not found",
         });
       }
-
       return updatingItem
-        .update(updateObject)
-        .then((updatingItem) => {
-          cacheRemover(`${model.name}-all`);
-          cacheRemover(`${model.name}-${req.params.id}`);
-          return res.status(201).json({ data: updatingItem });
+        .update({ language_level: req.body.language_level })
+        .then((updateObject) => {
+          return res.status(201).json({ data: updateObject });
         })
         .catch((err) => res.status(400).json({ message: err.toString() }));
     })
