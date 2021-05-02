@@ -60,7 +60,7 @@ module.exports = {
       });
   },
 
-  listByTopic(req, res) {
+  listByType(req, res) {
     client.get(`all-user-courses-${req.params.type}`, function (err, object) {
       if (object) {
         return res.status(200).json({ data: JSON.parse(object) });
@@ -91,7 +91,7 @@ module.exports = {
           })
           .then(function (result) {
             cacheSetter(
-              `all-courses-${req.params.user}-${req.params.type}-${req.body.minCap}-${req.body.maxCap}`,
+              `all-courses-${req.params.user}-${req.params.type}`,
               result
             );
 
@@ -123,7 +123,12 @@ module.exports = {
               {
                 model: courses,
                 as: "courses",
-                attributes: [["name", "name"]],
+                attributes: [
+                  ["topic", "topic"],
+                  ["level", "level"],
+                  ["content", "content"],
+                  ["type", "type"],
+                ],
               },
             ],
           })

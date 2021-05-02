@@ -7,6 +7,8 @@ router
   .post(authorize("admin"), groupController.create)
   .get(authorize("admin"), groupController.list);
 
+router.route("/count").get(groupController.getCount);
+
 router
   .route("/:id")
   .get(groupController.getOne)

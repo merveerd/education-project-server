@@ -4,6 +4,9 @@ const courseController = require("../controllers").course;
 const { authorize } = require("../utils/auth-middleware");
 
 router.route("/").post(courseController.create).get(courseController.list);
+
+router.route("/count").get(courseController.getCount);
+
 router
   .route("/:id")
   .get(courseController.getOne)

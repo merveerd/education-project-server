@@ -46,4 +46,22 @@ module.exports = {
       })
       .catch((error) => res.status(400).send(` error: ${error.toString()}`));
   },
+
+  listByLocation(req, res) {
+    return users
+      .findAll({
+        raw: true,
+        where: {
+          country: req.params.country.toLowerCase(),
+          city: req.params.state.toLowerCase(), //State city paradigma should be resolved
+        },
+      })
+      .then(function (result) {
+        res.status(200).json({ data: result });
+      })
+      .catch((error) => {
+        console.log(error.toString());
+        res.status(400).send(error.toString());
+      });
+  },
 };

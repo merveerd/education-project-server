@@ -8,6 +8,9 @@ client.on("error", function (err) {
 
 const getOne = (model) => async (req, res) => {
   client.get(`${model.name}-${req.params.id}`, function (err, object) {
+    // can be variable for id endpoint for country etc like  let keys = Object.keys(req.body),  where: {
+    //         keys[0]: req.params.keys[0],
+    //       },
     if (object) {
       return res.status(200).json({ data: JSON.parse(object) });
     } else {
@@ -54,7 +57,7 @@ const deleteOne = (model) => async (req, res) => {
     });
 };
 
-const list = (model) => (req, res) => {
+const list = (model) => async (req, res) => {
   try {
     client.get(`${model.name}-all`, async function (err, object) {
       if (object && object.length > 0) {
@@ -70,6 +73,15 @@ const list = (model) => (req, res) => {
         }
       }
     });
+  } catch (err) {
+    (err) => res.status(400).json({ message: err.toString() });
+  }
+};
+
+const getCount = (model) => async (req, res) => {
+  try {
+    const count = await model.count();
+    res.status(200).json({ data: count });
   } catch (err) {
     (err) => res.status(400).json({ message: err.toString() });
   }
@@ -102,9 +114,9 @@ const update = (model) => async (req, res) => {
 
           return res.status(201).json({ data: updatingItem });
         })
-        .catch((error) => res.status(400).json({ message: err.toString() }));
+        .catch((err) => res.status(400).json({ message: err.toString() }));
     })
-    .catch((error) => res.status(400).json({ message: err.toString() }));
+    .catch((err) => res.status(400).json({ message: err.toString() }));
 };
 
 module.exports = function crudController(model) {
@@ -113,5 +125,6 @@ module.exports = function crudController(model) {
     list: list(model),
     update: update(model),
     deleteOne: deleteOne(model),
+    getCount: getCount(model),
   };
 };
