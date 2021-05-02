@@ -30,6 +30,9 @@ module.exports = (sequelize, DataTypes) => {
     country: {
       type: DataTypes.STRING,
     },
+    state: {
+      type: DataTypes.STRING,
+    },
     city: {
       type: DataTypes.STRING,
     },
@@ -48,17 +51,14 @@ module.exports = (sequelize, DataTypes) => {
     },
     score: {
       type: DataTypes.INTEGER,
-      allowNull: true,
     },
     words: {
       //completed words
       type: DataTypes.INTEGER,
-      allowNull: true,
     },
     grammar: {
       //completed grammar
       type: DataTypes.INTEGER,
-      allowNull: true,
     },
 
     groupId: {

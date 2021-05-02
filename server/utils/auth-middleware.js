@@ -25,7 +25,7 @@ const createToken = (id, role) => {
 
 const signup = async (req, res) => {
   const { email, password, username } = req.body;
-  const hash = bcrypt.hashSync(password, 10);
+
   try {
     if (!email || !password || !username) {
       return res
@@ -42,15 +42,25 @@ const signup = async (req, res) => {
         .status(400)
         .json({ message: "A user with that email already exists" });
     }
-
-    user = await User.create({ email, password: hash, username });
+    let hash = bcrypt.hashSync(password, 10);
+    let keys = Object.keys(req.body),
+      updateObject = {};
+    keys.forEach((item) => {
+      updateObject[item] =
+        typeof req.body[item] === "string"
+          ? req.body[item].toLowerCase()
+          : req.body[item];
+    });
+    updateObject.password = hash;
+    user = await User.create(updateObject);
+    let role;
 
     if (email === admin.email) {
-      user.role = admin.role;
+      role = admin.role;
     }
-    const token = createToken(user.id, user.role);
+    const token = createToken(user.id, role);
     // send back the new user and auth token to the client
-    return res.status(201).json({ token, user });
+    return res.status(201).json({ token, user, role });
   } catch (err) {
     res.status(401).json({ message: err.toString() });
   }
@@ -90,7 +100,7 @@ const signin = async (req, res) => {
     } else {
       return res
         .status(401)
-        .json({ message: `${email} doesn't match any account.` });
+        .json({ message: `${email} doesn't match any account` });
     }
   } catch (err) {
     return res.status(400).json({ message: "Couldn't signin" });

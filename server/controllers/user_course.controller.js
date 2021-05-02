@@ -7,7 +7,7 @@ var redis = require("redis");
 var client = redis.createClient(6379, "localhost");
 
 client.on("error", function (err) {
-  console.log("Something went wrong ", err);
+  console.log("Something went wrong with redis", err);
 });
 
 const { cacheRemover, cacheSetter } = require("../utils/helper");
@@ -35,9 +35,8 @@ module.exports = {
           .status(201)
           .json({ data: result[0], message: `data created ${result[1]}` });
       })
-      .catch((error) => {
-        console.log(error.toString());
-        res.status(400).send(error);
+      .catch((err) => {
+        res.status(400).json({ message: err.toString() });
       });
   },
 
@@ -56,7 +55,7 @@ module.exports = {
         return status(200).json({ message: "deleted" });
       })
       .catch((err) => {
-        res.status(404).json({ message: err });
+        res.status(404).json({ message: err.toString() });
       });
   },
 
@@ -91,15 +90,14 @@ module.exports = {
           })
           .then(function (result) {
             cacheSetter(
-              `all-courses-${req.params.user}-${req.params.type}`,
+              `all-courses-${req.params.user}-${req.params.type}-${req.body.minCap}-${req.body.maxCap}`,
               result
             );
 
             res.status(200).json({ data: result });
           })
-          .catch((error) => {
-            console.log(error.toString());
-            res.status(400).send(error.toString());
+          .catch((err) => {
+            res.status(400).json({ message: err.toString() });
           });
       }
     });
@@ -137,9 +135,8 @@ module.exports = {
 
             res.status(200).json({ data: result });
           })
-          .catch((error) => {
-            console.log(error.toString());
-            res.status(400).send(error);
+          .catch((err) => {
+            res.status(400).json({ message: err.toString() });
           });
       }
     });
@@ -161,7 +158,7 @@ module.exports = {
                   id: req.params.userId.toLowerCase(),
                 },
                 as: "users",
-                attributes: [["name", "name"]],
+                attributes: [["email", "email"]],
               },
               {
                 model: courses,
@@ -169,16 +166,21 @@ module.exports = {
                 attributes: [
                   ["name", "name"],
                   ["type", "type"],
+                  ["topic", "topic"],
+                  ["level", "level"],
+                  ["content", "content"],
                 ],
               },
             ],
           })
           .then(function (result) {
-            cacheSetter(`${req.params.user}-all-courses`, result);
+            cacheSetter(`${req.params.userId}-all-courses`, result);
 
             return res.status(200).json({ data: result });
           })
-          .catch((error) => res.status(400).send(error));
+          .catch((err) => {
+            res.status(400).json({ message: err.toString() });
+          });
       }
     });
   },

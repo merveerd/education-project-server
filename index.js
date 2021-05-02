@@ -16,7 +16,7 @@ const port = 4000;
 //Auth Routes
 app.post("/signup", signup);
 app.post("/signin", signin);
-//app.get("/", protect);
+app.get("/", protect);
 
 const user_courseRoute = require("./server/routes/user_course.router");
 app.use("/usercourse", user_courseRoute);

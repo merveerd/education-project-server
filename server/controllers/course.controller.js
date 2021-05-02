@@ -6,7 +6,7 @@ const crudControllers = require("../utils/crud");
 const { cacheRemover } = require("../utils/helper");
 
 client.on("error", function (err) {
-  console.log("Something went wrong ", err);
+  console.log("Something went wrong with redis", err);
 });
 
 module.exports = {
