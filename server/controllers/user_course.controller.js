@@ -4,7 +4,8 @@ const user_course = require("../models").user_course;
 const crudControllers = require("../utils/crud");
 
 var redis = require("redis");
-var client = redis.createClient(6379, "localhost");
+const redisHost = process.env.REDIS_HOST || "127.0.0.1";
+var client = redis.createClient(6379, redisHost);
 
 client.on("error", function (err) {
   console.log("Something went wrong with redis", err);

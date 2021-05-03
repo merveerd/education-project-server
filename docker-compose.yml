@@ -1,0 +1,31 @@
+version: "3"
+services:
+  redis:
+    image: redis
+    networks:
+      - webnet
+  db:
+    image: postgres
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+      - ./node_modules
+
+    networks:
+      - webnet
+    environment:
+      POSTGRES_PASSWORD: aKEg9jbkoIulF4GwosapsFEpnGENPUjw
+      POSTGRES_USER: xwprzama
+      POSTGRES_DB: xwprzama
+  web:
+    image: education
+    ports:
+      - "4000:4000"
+    networks:
+      - webnet
+    environment:
+      DB_HOST: db
+      REDIS_HOST: redis
+    command: ["./wait-for-it.sh", "db:5432", "--", "node", "index.js"]
+    #command: ["node", "index.js"]
+networks:
+  webnet:

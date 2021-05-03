@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const jwtIdentifier = require("express-jwt");
 
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const User = require("../models").user;
 const admin = require("./userData").privilegedUsers[0];
 

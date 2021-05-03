@@ -1,6 +1,7 @@
 const redis = require("redis");
 var Sequelize = require("sequelize");
-const client = redis.createClient(6379, "localhost");
+const redisHost = process.env.REDIS_HOST || "127.0.0.1";
+var client = redis.createClient(6379, redisHost);
 const crudControllers = require("../utils/crud");
 const users = require("../models").user;
 
